@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HabitFlow.Domain\HabitFlow.Domain.csproj" />
+    <ProjectReference Include="..\HabitFlow.Application\HabitFlow.Application.csproj" />
   </ItemGroup>
 
 </Project>
