@@ -26,6 +26,22 @@ public class Habit
         CreatedAt = DateTime.UtcNow;
     }
 
+    public void UpdateHabit(string name, TimeSpan? duration, HabitPriority priority, DateOnly startDate, DateOnly? endDate, string? description)
+    {
+        var newName = ValidateName(name);
+        ValidateDuration(duration);
+        ValidateHabitPriority(priority);
+        ValidateDates(startDate, endDate);
+        var newDescription = ValidateDescription(description);
+
+        Name = newName;
+        Duration = duration;
+        HabitPriority = priority;
+        StartDate = startDate;
+        EndDate = endDate;
+        Description = newDescription;
+    }
+
     public void ChangeName(string name)
     {
         Name= ValidateName(name);
@@ -107,7 +123,7 @@ public class Habit
     {
         if(name == null)
         {
-            throw new ArgumentNullException("Name cannot be null");
+            throw new ArgumentNullException(nameof(name), "Name cannot be null");
         }
 
         var normalizedName = name.Trim();
