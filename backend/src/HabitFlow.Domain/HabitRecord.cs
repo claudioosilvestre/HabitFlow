@@ -21,6 +21,17 @@ public class HabitRecord
         Description = description;
     }
 
+    public void Update(HabitState habitState, DateOnly recordDate, string? description)
+    {
+        ValidateHabitState(habitState);
+        ValidateRecordDate(recordDate);
+        ValidateDescription(description);
+
+        HabitState = habitState;
+        RecordDate = recordDate;
+        Description = description;
+    }
+
     public void ChangeHabitState(HabitState habitState)
     {
         ValidateHabitState(habitState);
