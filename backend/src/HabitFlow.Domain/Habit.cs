@@ -11,16 +11,16 @@ public class Habit
     public DateTime CreatedAt {get; private set;}
     public string? Description {get; private set;}
 
-    public Habit(string name, TimeSpan? duration, HabitPriority priority, DateOnly startDate, DateOnly? endDate, string? description)
+    public Habit(string name, TimeSpan? duration, HabitPriority habitPriority, DateOnly startDate, DateOnly? endDate, string? description)
     {
         Name = ValidateName(name);
         ValidateDuration(duration);
-        ValidateHabitPriority(priority);
+        ValidateHabitPriority(habitPriority);
         ValidateDates(startDate, endDate);
         Description = ValidateDescription(description);
 
         Duration = duration;
-        HabitPriority = priority;
+        HabitPriority = habitPriority;
         StartDate = startDate;
         EndDate = endDate;
         CreatedAt = DateTime.UtcNow;
