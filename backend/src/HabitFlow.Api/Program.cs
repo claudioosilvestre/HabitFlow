@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using HabitFlow.Api.Handlers;
 using HabitFlow.Application.Converters;
 using HabitFlow.Application.Interfaces;
@@ -21,7 +22,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
+{
+options.JsonSerializerOptions.Converters.Add(
+new JsonStringEnumConverter());
+});
 
 builder.Services.AddScoped<IHabitRepository, HabitRepository>();
 builder.Services.AddScoped<IHabitRecordRepository, HabitRecordRepository>();
