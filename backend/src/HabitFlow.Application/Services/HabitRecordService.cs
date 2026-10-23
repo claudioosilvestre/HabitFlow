@@ -1,4 +1,3 @@
-using HabitFlow.Application.Converters;
 using HabitFlow.Application.Dtos;
 using HabitFlow.Application.Exceptions;
 using HabitFlow.Application.Interfaces;
@@ -10,10 +9,10 @@ public class HabitRecordService : IHabitRecordService
 {
     private readonly IHabitRecordRepository _habitRecordRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly HabitRecordConverter _habitRecordConverter;
+    private readonly IHabitRecordConverter _habitRecordConverter;
     private readonly IHabitRepository _habitRepository;
 
-    public HabitRecordService(IHabitRecordRepository habitRecordRepository, IUnitOfWork unitOfWork, HabitRecordConverter habitRecordConverter, IHabitRepository habitRepository)
+    public HabitRecordService(IHabitRecordRepository habitRecordRepository, IUnitOfWork unitOfWork, IHabitRecordConverter habitRecordConverter, IHabitRepository habitRepository)
     {
         _habitRecordRepository = habitRecordRepository;
         _unitOfWork = unitOfWork;

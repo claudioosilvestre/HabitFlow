@@ -34,8 +34,8 @@ builder.Services.AddScoped<IHabitRecordRepository, HabitRecordRepository>();
 builder.Services.AddScoped<IHabitService, HabitService>();
 builder.Services.AddScoped<IHabitRecordService, HabitRecordService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<HabitConverter>();
-builder.Services.AddScoped<HabitRecordConverter>();
+builder.Services.AddScoped<IHabitConverter, HabitConverter>();
+builder.Services.AddScoped<IHabitRecordConverter, HabitRecordConverter>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
