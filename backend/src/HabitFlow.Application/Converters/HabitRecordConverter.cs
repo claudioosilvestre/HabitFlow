@@ -1,9 +1,10 @@
 using HabitFlow.Application.Dtos;
+using HabitFlow.Application.Interfaces;
 using HabitFlow.Domain;
 
 namespace HabitFlow.Application.Converters;
 
-public class HabitRecordConverter
+public class HabitRecordConverter : IHabitRecordConverter
 {
     public HabitRecordResponseDto ToResponseDto(HabitRecord habitRecord)
     {

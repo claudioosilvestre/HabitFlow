@@ -10,9 +10,9 @@ public class HabitService : IHabitService
 {
     private readonly IHabitRepository _habitRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly HabitConverter _habitConverter;
+    private readonly IHabitConverter _habitConverter;
 
-    public HabitService(IHabitRepository habitRepository, IUnitOfWork unitOfWork, HabitConverter habitConverter)
+    public HabitService(IHabitRepository habitRepository, IUnitOfWork unitOfWork, IHabitConverter habitConverter)
     {
         _habitRepository = habitRepository;
         _unitOfWork = unitOfWork;
