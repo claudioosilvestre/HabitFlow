@@ -3,7 +3,6 @@ using Moq;
 using HabitFlow.Application.Services;
 using HabitFlow.Application.Interfaces;
 using HabitFlow.Application.Dtos;
-using HabitFlow.Application.Converters;
 using HabitFlow.Application.Exceptions;
 using HabitFlow.Domain;
 
