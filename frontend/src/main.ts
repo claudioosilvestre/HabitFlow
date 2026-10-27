@@ -1,6 +1,8 @@
 import { listHabits } from "./components/HabitList";
 import { createHabit, getHabits } from "./services/HabitService";
 import { habitForm } from "./components/HabitForm";
+import { dashboard } from "./components/Dashboard";
+import "../styles/style.css";
 
 const app = document.getElementById("app");
 if(app === null) {
@@ -30,7 +32,7 @@ nav.addEventListener("click", (event) => {
 
         switch(dataPage) {
             case "dashboard":
-
+                dashboard(app);
                 break;
 
             case "habits":
@@ -38,12 +40,14 @@ nav.addEventListener("click", (event) => {
                 break;
 
             case "stats":
-
+                showStatsPage(app);
                 break;
         }
         
     }
 })
+
+dashboard(app);
 
 async function showHabitsPage(element:HTMLElement) {
     element.innerHTML = "";
@@ -83,8 +87,8 @@ async function showHabitsPage(element:HTMLElement) {
 }
 
 
-async function showDashboardPage(element:HTMLElement) {
-    
+async function showStatsPage(element:HTMLElement) {
+    element.innerHTML = "";
 }
 
 

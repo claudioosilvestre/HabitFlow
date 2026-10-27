@@ -15,7 +15,6 @@ export async function getHabits() : Promise<Habit[]> {
 
     return data;
 }
-
 export async function createHabit (request:HabitCreateRequest) : Promise<Habit> {
     
     const response = await fetch(url, {
