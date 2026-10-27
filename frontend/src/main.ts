@@ -1,11 +1,92 @@
 import { listHabits } from "./components/HabitList";
-import { getHabits } from "./services/HabitService";
+import { createHabit, getHabits } from "./services/HabitService";
+import { habitForm } from "./components/HabitForm";
 
 const app = document.getElementById("app");
 if(app === null) {
     throw new Error("Failed to get app.");
 }
 
-const habits = await getHabits();
+const nav = document.getElementById("nav");
+if(nav === null) {
+    throw new Error("Failed to get nav.");
+}
 
-listHabits(app, habits);
+nav.addEventListener("click", (event) => {
+
+    event.preventDefault();
+
+    if(event.target instanceof Element) {
+        const link = event.target.closest("a[data-page]");
+
+        if(link === null) {
+            return;
+        }
+
+        const dataPage = link.getAttribute("data-page");
+        if(dataPage === null) {
+            return;
+        }
+
+        switch(dataPage) {
+            case "dashboard":
+
+                break;
+
+            case "habits":
+                showHabitsPage(app);
+                break;
+
+            case "stats":
+
+                break;
+        }
+        
+    }
+})
+
+async function showHabitsPage(element:HTMLElement) {
+    element.innerHTML = "";
+
+    const habitListDiv = document.createElement("div");
+    element.appendChild(habitListDiv);
+
+    const habits = await getHabits();
+
+    listHabits(habitListDiv, habits);
+
+    const createButton = document.createElement("button");
+    createButton.type = "button";
+    createButton.textContent = "Create Habit";
+
+    element.appendChild(createButton);
+
+    createButton.addEventListener("click", async (event) => {
+
+        
+        habitForm(element, async (habitCreateRequest) => {
+                
+            try {
+                await createHabit(habitCreateRequest);
+
+                const updatedHabits = await getHabits();
+
+                listHabits(habitListDiv, updatedHabits);
+            
+            } catch(error) {
+                if(error instanceof Error) {
+                    alert("Failed to create habit. Please try again.");
+                }
+            }
+        }) 
+    });
+}
+
+
+async function showDashboardPage(element:HTMLElement) {
+    
+}
+
+
+
+
