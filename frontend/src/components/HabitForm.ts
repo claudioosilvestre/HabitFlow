@@ -1,7 +1,7 @@
 import type { HabitCreateRequest } from "../types/HabitCreateRequest";
 import { HabitPriority } from "../types/HabitPriority";
 
-export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitCreateRequest) => void) : void {
+export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitCreateRequest) => Promise<void>) : void {
 
     const form = document.createElement("form");
 
@@ -146,7 +146,7 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
     submitButton.type = "submit";
     submitButton.textContent = "Submit";
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         let endDateVerification: string | null;
@@ -203,7 +203,13 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
             description: descriptionVerification
         };
 
-        onCreate(habitCreateRequest);
+        try {
+            await onCreate(habitCreateRequest);
+
+            form.remove();
+        } catch(error) {
+            alert("Failed to create habit.");
+        }
     })
 
     form.appendChild(nameGroup);
