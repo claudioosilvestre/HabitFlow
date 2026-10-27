@@ -17,6 +17,7 @@ public class HabitConverter : IHabitConverter
         habitResponseDto.Duration = habit.Duration;
         habitResponseDto.Description = habit.Description;
         habitResponseDto.CreatedAt = habit.CreatedAt;
+        habitResponseDto.DaysOfWeek = habit.DaysOfWeek.ToList();
         
         return habitResponseDto;
     }

@@ -1,5 +1,6 @@
 import type { HabitCreateRequest } from "../types/HabitCreateRequest";
 import { HabitPriority } from "../types/HabitPriority";
+import type { WeekDay } from "../types/Habit";
 
 export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitCreateRequest) => Promise<void>) : void {
 
@@ -142,6 +143,38 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
     descriptionGroup.appendChild(descriptionLabel);
     descriptionGroup.appendChild(descriptionInput);
 
+    const scheduleGroup = document.createElement("div");
+    scheduleGroup.className = "form-group schedule-group";
+    const scheduleFieldSet = document.createElement("fieldset");
+    const scheduleLegend = document.createElement("legend");
+    scheduleLegend.textContent = "Dias em que se repete";
+    scheduleFieldSet.appendChild(scheduleLegend);
+    const dayOptions: Array<{ value: WeekDay; label: string }> = [
+        { value: "Monday", label: "Seg" }, { value: "Tuesday", label: "Ter" },
+        { value: "Wednesday", label: "Qua" }, { value: "Thursday", label: "Qui" },
+        { value: "Friday", label: "Sex" }, { value: "Saturday", label: "Sáb" },
+        { value: "Sunday", label: "Dom" }
+    ];
+    const dayCheckboxes: HTMLInputElement[] = [];
+    dayOptions.forEach(({ value, label }) => {
+        const dayLabel = document.createElement("label");
+        dayLabel.className = "schedule-day";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = value;
+        checkbox.checked = true;
+        checkbox.setAttribute("aria-label", label);
+        const dayName = document.createElement("span");
+        dayName.textContent = label;
+        dayLabel.append(checkbox, dayName);
+        scheduleFieldSet.appendChild(dayLabel);
+        dayCheckboxes.push(checkbox);
+        checkbox.addEventListener("change", () => {
+            if (dayCheckboxes.some(dayCheckbox => dayCheckbox.checked)) dayCheckboxes[0]?.setCustomValidity("");
+        });
+    });
+    scheduleGroup.appendChild(scheduleFieldSet);
+
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
     submitButton.textContent = "Submit";
@@ -173,6 +206,9 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
             }
         }
 
+        const selectedDays = dayCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value as WeekDay);
+        dayCheckboxes[0]?.setCustomValidity(selectedDays.length === 0 ? "Seleciona pelo menos um dia." : "");
+
         if(!form.reportValidity()) {
             return;
         }
@@ -200,7 +236,8 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
             habitPriority: habitPriorityInput.value as HabitPriority,
             startDate: startDateInput.value,
             endDate: endDateVerification,
-            description: descriptionVerification
+            description: descriptionVerification,
+            daysOfWeek: selectedDays
         };
 
         try {
@@ -218,6 +255,7 @@ export function habitForm(element : HTMLElement, onCreate: (habitCreate : HabitC
     form.appendChild(startDateGroup);
     form.appendChild(endDateGroup);
     form.appendChild(descriptionGroup);
+    form.appendChild(scheduleGroup);
     form.appendChild(submitButton);
 
     element.appendChild(form);

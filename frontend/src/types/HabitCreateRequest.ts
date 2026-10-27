@@ -1,4 +1,5 @@
 import type { HabitPriority } from "./HabitPriority";
+import type { WeekDay } from "./Habit";
 
 export interface HabitCreateRequest {
     name : string;
@@ -7,4 +8,5 @@ export interface HabitCreateRequest {
     startDate : string;
     endDate : string | null;
     description : string | null;
+    daysOfWeek: WeekDay[];
 }
