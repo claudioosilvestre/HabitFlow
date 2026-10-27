@@ -2,3 +2,42 @@
     display: flex;
     justify-content: space-between;
 }
+
+.dashboard-date {
+    color: #666;
+    text-transform: capitalize;
+}
+
+.dashboard-progress {
+    font-weight: 600;
+}
+
+.dashboard-habit-list {
+    display: grid;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+}
+
+.dashboard-habit {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.dashboard-habit label {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.dashboard-habit.completed span {
+    color: #666;
+    text-decoration: line-through;
+}
+
+.dashboard-habit p {
+    color: #666;
+    margin: 0.5rem 0 0 1.8rem;
+}
