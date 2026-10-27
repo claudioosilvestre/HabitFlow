@@ -2,6 +2,7 @@ import { listHabits } from "./components/HabitList";
 import { createHabit, getHabits } from "./services/HabitService";
 import { habitForm } from "./components/HabitForm";
 import { dashboard } from "./components/Dashboard";
+import { stats } from "./components/Stats";
 import "../styles/style.css";
 
 const app = document.getElementById("app");
@@ -40,7 +41,7 @@ nav.addEventListener("click", (event) => {
                 break;
 
             case "stats":
-                showStatsPage(app);
+                stats(app);
                 break;
         }
         
@@ -61,7 +62,7 @@ async function showHabitsPage(element:HTMLElement) {
 
     const createButton = document.createElement("button");
     createButton.type = "button";
-    createButton.textContent = "Create Habit";
+    createButton.textContent = "Criar Hábito";
 
     element.appendChild(createButton);
 
@@ -85,12 +86,6 @@ async function showHabitsPage(element:HTMLElement) {
         }) 
     });
 }
-
-
-async function showStatsPage(element:HTMLElement) {
-    element.innerHTML = "";
-}
-
 
 
 
