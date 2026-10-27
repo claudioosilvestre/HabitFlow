@@ -41,3 +41,40 @@
     color: #666;
     margin: 0.5rem 0 0 1.8rem;
 }
+
+.stats-period {
+    color: #666;
+    margin-bottom: 1.25rem;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin: 0;
+}
+
+.stats-card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+}
+
+.stats-card dt {
+    color: #555;
+    font-weight: 600;
+}
+
+.stats-card dd {
+    margin: 0.5rem 0;
+}
+
+.stats-value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.stats-card p {
+    color: #666;
+    margin-bottom: 0;
+}

@@ -8,6 +8,12 @@ export async function getHabitRecordsByDate(date: string): Promise<HabitRecord[]
     return await response.json() as HabitRecord[];
 }
 
+export async function getAllHabitRecords(): Promise<HabitRecord[]> {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Failed to get habit records.");
+    return await response.json() as HabitRecord[];
+}
+
 export async function saveHabitCompletion(habitId: number, date: string, completed: boolean, record?: HabitRecord): Promise<HabitRecord> {
     const state = completed ? "Completed" : "Pending";
 
