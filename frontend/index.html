@@ -4,33 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#101a2c">
-    <title>HabitFlow | Hábitos com intenção</title>
+    <meta name="description" content="Acompanha os teus hábitos, um dia de cada vez.">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <title>Hoje · HabitFlow</title>
 </head>
 <body>
     <div class="app-shell">
         <nav id="nav" class="sidebar" aria-label="Navegação principal">
-            <a class="brand" href="#" data-page="dashboard" aria-label="HabitFlow, início">
-                <span class="brand-mark" aria-hidden="true">H</span>
-                <span>habit<span class="brand-accent">flow</span><small>PERSONAL WORKSPACE</small></span>
+            <a class="brand" href="/" data-page="dashboard" aria-label="HabitFlow, início">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 9.5 17 19 7.5"/></svg>
+                </span>
+                <span>habit<span class="brand-accent">flow</span></span>
             </a>
-            <p class="nav-caption">MENU PRINCIPAL</p>
             <ul class="nav-links">
-                <li><a href="#" data-page="dashboard" class="active"><span class="nav-icon" aria-hidden="true">◫</span>Dashboard</a></li>
-                <li><a href="#" data-page="habits"><span class="nav-icon" aria-hidden="true">✓</span>Os meus hábitos</a></li>
-                <li><a href="#" data-page="stats"><span class="nav-icon" aria-hidden="true">▥</span>Estatísticas</a></li>
+                <li><a href="/" data-page="dashboard" class="active"><span class="nav-icon" data-icon="home"></span>Hoje</a></li>
+                <li><a href="/habits" data-page="habits"><span class="nav-icon" data-icon="check"></span>Hábitos</a></li>
+                <li><a href="/stats" data-page="stats"><span class="nav-icon" data-icon="chart"></span>Estatísticas</a></li>
             </ul>
-            <div class="sidebar-bottom">
-                <div class="sidebar-note"><span class="note-icon">✦</span><strong>Um dia de cada vez.</strong><span>Pequenos passos criam grandes mudanças.</span></div>
-                <div class="user-profile"><span class="avatar">HF</span><span><strong>O meu espaço</strong><small>Conta pessoal</small></span><span class="profile-menu">···</span></div>
-            </div>
         </nav>
         <div class="workspace">
             <header class="topbar">
-                <div><span class="topbar-eyebrow">WORKSPACE</span><span class="topbar-divider">/</span><span class="topbar-current">Visão geral</span></div>
-                <div class="topbar-status"><span class="status-dot"></span>O teu progresso, ao teu ritmo</div>
+                <h1 class="topbar-current">Hoje</h1>
             </header>
             <main id="app" class="page-content"></main>
         </div>
+        <nav class="bottom-nav" aria-label="Navegação móvel">
+            <a href="/" data-page="dashboard" class="active"><span class="nav-icon" data-icon="home"></span>Hoje</a>
+            <a href="/habits" data-page="habits"><span class="nav-icon" data-icon="check"></span>Hábitos</a>
+            <a href="/stats" data-page="stats"><span class="nav-icon" data-icon="chart"></span>Estatísticas</a>
+        </nav>
     </div>
     <script type="module" src="./src/main.ts"></script>
 </body>

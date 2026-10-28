@@ -1,50 +1,66 @@
 import { dashboard } from "./components/Dashboard";
 import { habitsPage } from "./components/Habits";
 import { stats } from "./components/Stats";
+import { iconSvg, type IconName } from "./icons";
+import { pageTitle, parseRoute, startRouter, type PageId, navigate } from "./router";
+import { closeOverlays } from "./ui/overlay";
 import "../styles/style.css";
 
 const app = document.getElementById("app");
-if (app === null) {
-    throw new Error("Failed to get app.");
-}
+if (app === null) throw new Error("Failed to get app.");
 
-const nav = document.getElementById("nav");
-if (nav === null) {
-    throw new Error("Failed to get nav.");
-}
+const currentPageLabel = document.querySelector(".topbar-current");
 
-const pageTitles: Record<string, string> = {
-    dashboard: "Dashboard",
-    habits: "Os meus hábitos",
-    stats: "Estatísticas"
-};
-
-nav.addEventListener("click", (event) => {
-    event.preventDefault();
-
-    if (!(event.target instanceof Element)) return;
-
-    const link = event.target.closest("a[data-page]");
-    if (link === null) return;
-
-    const dataPage = link.getAttribute("data-page");
-    if (dataPage === null) return;
-
-    nav.querySelectorAll("a[data-page]").forEach(pageLink => pageLink.classList.toggle("active", pageLink === link));
-    const currentPage = document.querySelector(".topbar-current");
-    if (currentPage) currentPage.textContent = pageTitles[dataPage] ?? "Dashboard";
-
-    switch (dataPage) {
-        case "dashboard":
-            dashboard(app);
-            break;
-        case "habits":
-            void habitsPage(app);
-            break;
-        case "stats":
-            void stats(app);
-            break;
-    }
+document.querySelectorAll("[data-icon]").forEach(node => {
+    const name = node.getAttribute("data-icon") as IconName | null;
+    if (name) node.innerHTML = iconSvg(name);
 });
 
-void dashboard(app);
+document.querySelectorAll("a[data-page]").forEach(link => {
+    link.addEventListener("click", (event) => {
+        event.preventDefault();
+        const href = link.getAttribute("href");
+        if (href) navigate(href);
+    });
+});
+
+function setActive(page: PageId): void {
+    document.querySelectorAll("a[data-page]").forEach(link => {
+        link.classList.toggle("active", link.getAttribute("data-page") === page);
+    });
+    if (currentPageLabel) currentPageLabel.textContent = pageTitle(page);
+}
+
+let renderToken = 0;
+
+startRouter((route) => {
+    const token = ++renderToken;
+    closeOverlays();
+    setActive(route.page);
+    app.replaceChildren();
+
+    const run = async () => {
+        switch (route.page) {
+            case "habits":
+                await habitsPage(app, route.params);
+                break;
+            case "stats":
+                await stats(app);
+                break;
+            default:
+                await dashboard(app);
+        }
+    };
+
+    void run().then(() => {
+        if (token !== renderToken) return;
+        const canonical = route.page === "dashboard" ? "/" : `/${route.page}`;
+        if (route.path !== canonical && route.params.toString() === "") {
+            history.replaceState({}, "", canonical);
+        }
+    });
+});
+
+if (parseRoute().path === "/" && window.location.pathname === "/index.html") {
+    history.replaceState({}, "", "/");
+}
