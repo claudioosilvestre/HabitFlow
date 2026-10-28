@@ -1,5 +1,5 @@
 import type { Habit } from "../types/Habit";
-import { priorityRank } from "../labels";
+import { priorityRank } from "../lib/labels";
 import { toDateString } from "./dates";
 
 export type HabitStatus = "upcoming" | "active" | "ended";

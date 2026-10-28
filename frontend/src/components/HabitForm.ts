@@ -1,4 +1,4 @@
-import { dayOptions } from "../labels";
+import { dayOptions } from "../lib/labels";
 import type { Habit, WeekDay } from "../types/Habit";
 import type { HabitCreateRequest } from "../types/HabitCreateRequest";
 import { HabitPriority } from "../types/HabitPriority";

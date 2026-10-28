@@ -1,4 +1,4 @@
-import { iconSvg } from "../icons";
+import { iconSvg } from "../lib/icons";
 
 export interface ModalHandle {
     body: HTMLElement;

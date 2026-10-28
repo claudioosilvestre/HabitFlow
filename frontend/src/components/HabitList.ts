@@ -1,5 +1,5 @@
-import { iconSvg } from "../icons";
-import { dayLabels, priorityLabels } from "../labels";
+import { iconSvg } from "../lib/icons";
+import { dayLabels, priorityLabels } from "../lib/labels";
 import type { Habit } from "../types/Habit";
 import { formatDateRange, formatDuration, habitStatus } from "../utils/habits";
 

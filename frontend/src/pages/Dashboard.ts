@@ -4,9 +4,9 @@ import type { Habit } from "../types/Habit";
 import type { HabitRecord } from "../types/HabitRecord";
 import { addDays, isDueOnDate, toDateString } from "../utils/dates";
 import { compareHabits, formatDuration, greeting } from "../utils/habits";
-import { priorityLabels } from "../labels";
-import { iconSvg } from "../icons";
-import { navigate } from "../router";
+import { priorityLabels } from "../lib/labels";
+import { iconSvg } from "../lib/icons";
+import { navigate } from "../lib/router";
 import { renderEmptyState, renderErrorState, renderSkeleton } from "../ui/feedback";
 import { showToast } from "../ui/toast";
 

@@ -1,9 +1,9 @@
-import { listHabits } from "./HabitList";
-import { habitForm } from "./HabitForm";
+import { listHabits } from "../components/HabitList";
+import { habitForm } from "../components/HabitForm";
 import { createHabit, deleteHabit, getHabits, updateHabit } from "../services/HabitService";
 import type { Habit } from "../types/Habit";
-import { iconSvg } from "../icons";
-import { replaceUrl } from "../router";
+import { iconSvg } from "../lib/icons";
+import { replaceUrl } from "../lib/router";
 import { confirmAction, openModal } from "../ui/overlay";
 import { renderEmptyState, renderErrorState, renderSkeleton } from "../ui/feedback";
 import { showToast } from "../ui/toast";

@@ -1,5 +1,5 @@
-import { HabitPriority } from "./types/HabitPriority";
-import type { WeekDay } from "./types/Habit";
+import { HabitPriority } from "../types/HabitPriority";
+import type { WeekDay } from "../types/Habit";
 
 export const dayLabels: Record<WeekDay, string> = {
     Monday: "Seg",

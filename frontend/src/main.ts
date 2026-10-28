@@ -1,10 +1,10 @@
-import { dashboard } from "./components/Dashboard";
-import { habitsPage } from "./components/Habits";
-import { stats } from "./components/Stats";
-import { iconSvg, type IconName } from "./icons";
-import { pageTitle, parseRoute, startRouter, type PageId, navigate } from "./router";
+import { dashboard } from "./pages/Dashboard";
+import { habitsPage } from "./pages/Habits";
+import { stats } from "./pages/Stats";
+import { iconSvg, type IconName } from "./lib/icons";
+import { pageTitle, parseRoute, startRouter, type PageId, navigate } from "./lib/router";
 import { closeOverlays } from "./ui/overlay";
-import "../styles/style.css";
+import "./styles/style.css";
 
 const app = document.getElementById("app");
 if (app === null) throw new Error("Failed to get app.");
