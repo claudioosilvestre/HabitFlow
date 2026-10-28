@@ -2,12 +2,13 @@ import { getHabits } from "../services/HabitService";
 import { getHabitRecordsByDate, saveHabitCompletion } from "../services/HabitRecordService";
 import type { Habit } from "../types/Habit";
 import type { HabitRecord } from "../types/HabitRecord";
+import { isDueOnDate, toDateString } from "../utils/dates";
 
 export async function dashboard(element: HTMLElement): Promise<void> {
     element.innerHTML = "";
 
     const today = new Date();
-    const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    const date = toDateString(today);
     const heading = document.createElement("h1");
     heading.textContent = "Os teus hábitos de hoje";
     element.appendChild(heading);
@@ -22,7 +23,7 @@ export async function dashboard(element: HTMLElement): Promise<void> {
 
     try {
         const [habits, records] = await Promise.all([getHabits(), getHabitRecordsByDate(date)]);
-        const activeHabits = habits.filter(habit => isActiveOnDate(habit, date));
+        const activeHabits = habits.filter(habit => isDueOnDate(habit, date));
         const recordByHabit = new Map<number, HabitRecord>(records.map(record => [record.habitId, record]));
         const progress = document.createElement("p");
         progress.className = "dashboard-progress";
@@ -92,11 +93,3 @@ function updateProgress(element: HTMLElement, habits: Habit[], records: Map<numb
     element.textContent = `${completedCount} de ${habits.length} concluídos`;
 }
 
-function isActiveOnDate(habit: Habit, date: string): boolean {
-    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
-    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date(year, month - 1, day).getDay()];
-    return habit.startDate.slice(0, 10) <= date
-        && (!habit.endDate || habit.endDate.slice(0, 10) >= date)
-        && weekday !== undefined
-        && habit.daysOfWeek.includes(weekday as Habit["daysOfWeek"][number]);
-}
