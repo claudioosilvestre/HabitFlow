@@ -3,6 +3,7 @@ import { getAllHabitRecords } from "../services/HabitRecordService";
 import type { Habit } from "../types/Habit";
 import type { HabitRecord } from "../types/HabitRecord";
 import type { HabitStats } from "../types/HabitStats";
+import { addDays, isActiveOnDate, isScheduledOn, toDateString } from "../utils/dates";
 
 export async function stats(element: HTMLElement): Promise<void> {
     element.innerHTML = "";
@@ -73,17 +74,11 @@ function calculateCurrentStreak(habits: Habit[], records: Map<string, HabitRecor
 }
 
 function habitsActiveOn(habits: Habit[], date: string): Habit[] {
-    return habits.filter(habit => habit.startDate.slice(0, 10) <= date && (!habit.endDate || habit.endDate.slice(0, 10) >= date));
+    return habits.filter(habit => isActiveOnDate(habit, date));
 }
 
 function habitsScheduledOn(habits: Habit[], date: string): Habit[] {
     return habitsActiveOn(habits, date).filter(habit => isScheduledOn(habit, date));
-}
-
-function isScheduledOn(habit: Habit, date: string): boolean {
-    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
-    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date(year, month - 1, day).getDay()];
-    return weekday !== undefined && habit.daysOfWeek.includes(weekday as Habit["daysOfWeek"][number]);
 }
 
 function renderStats(element: HTMLElement, summary: HabitStats): void {
@@ -95,10 +90,10 @@ function renderStats(element: HTMLElement, summary: HabitStats): void {
     const list = document.createElement("dl");
     list.className = "stats-grid";
     const values: Array<[string, string, string]> = [
-        ["Completion Rate", `${summary.completionRate}%`, "Percentagem de hábitos concluídos no período"],
-        ["Completed Habits", String(summary.completedHabits), "Total de hábitos concluídos no período"],
-        ["Missed Habits", String(summary.missedHabits), "Total de hábitos que não foram concluídos"],
-        ["Current Streak", `${summary.currentStreak} ${summary.currentStreak === 1 ? "dia" : "dias"}`, "Dias previstos consecutivos com todos os hábitos concluídos"]
+        ["Taxa de conclusão", `${summary.completionRate}%`, "Percentagem de hábitos concluídos no período"],
+        ["Hábitos concluídos", String(summary.completedHabits), "Total de hábitos concluídos no período"],
+        ["Hábitos em falta", String(summary.missedHabits), "Total de hábitos que não foram concluídos"],
+        ["Sequência atual", `${summary.currentStreak} ${summary.currentStreak === 1 ? "dia" : "dias"}`, "Dias previstos consecutivos com todos os hábitos concluídos"]
     ];
 
     for (const [title, value, description] of values) {
@@ -115,16 +110,6 @@ function renderStats(element: HTMLElement, summary: HabitStats): void {
         list.appendChild(card);
     }
     element.appendChild(list);
-}
-
-function toDateString(date: Date): string {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
-
-function addDays(date: string, amount: number): string {
-    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
-    const result = new Date(year, month - 1, day + amount);
-    return toDateString(result);
 }
 
 function formatDate(date: string): string {

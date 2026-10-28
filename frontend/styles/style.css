@@ -118,8 +118,15 @@ button, a, input[type="checkbox"] { -webkit-tap-highlight-color: transparent; }
 
 button { background: #14263c; border: 0; border-radius: 8px; color: #fff; cursor: pointer; font-size: 12px; font-weight: 600; padding: 11px 16px; transition: background .18s, transform .18s; }
 button:hover { background: #203b58; transform: translateY(-1px); }
+button:disabled { cursor: not-allowed; opacity: .6; transform: none; }
+button.secondary { background: #eef2f6; color: #314256; }
+button.secondary:hover { background: #e2e8ef; }
+button.danger { background: #f4e8e8; color: #9a3b3b; }
+button.danger:hover { background: #eddada; }
 #app > button { margin: 17px 0; }
+.empty-state { background: #fff; border: 1px solid var(--line); border-radius: 12px; color: #7b8798; font-size: 12px; line-height: 1.6; margin: 18px 0; max-width: 750px; padding: 18px; }
 form { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 8px 28px #21364c0a; display: grid; gap: 16px; margin-top: 14px; max-width: 640px; padding: 23px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .form-group { display: grid; gap: 7px; }
 .form-group > label, fieldset legend { color: #536176; font-size: 11px; font-weight: 600; }
 .form-group input, .form-group select, .form-group textarea { background: #fbfcfe; border: 1px solid #dfe5ec; border-radius: 7px; color: #25354a; min-height: 39px; outline: none; padding: 9px 11px; width: 100%; }
@@ -135,10 +142,19 @@ fieldset input { max-width: 95px; }
 .schedule-day:has(input:checked) { background: #e8f7f3; border-color: #9fdecf; color: #168b75 !important; }
 .schedule-day input { accent-color: #18a889; height: 13px; margin: 0 5px 0 0; min-height: 0; padding: 0; width: 13px; }
 form button { justify-self: start; }
-#app > div > ul:not(.dashboard-habit-list) { display: grid; gap: 9px; list-style: none; margin: 18px 0; max-width: 750px; padding: 0; }
-#app > div > ul:not(.dashboard-habit-list) li { background: #fff; border: 1px solid var(--line); border-radius: 10px; color: #29394d; font-size: 12px; font-weight: 600; padding: 15px 17px; }
-#app > div > ul:not(.dashboard-habit-list) li { align-items: center; display: flex; justify-content: space-between; }
-.habit-schedule { color: #8290a2; font-size: 10px; font-weight: 500; }
+.habit-list { display: grid; gap: 9px; list-style: none; margin: 18px 0; max-width: 750px; padding: 0; }
+.habit-card { align-items: flex-start; background: #fff; border: 1px solid var(--line); border-radius: 10px; color: #29394d; display: flex; gap: 16px; justify-content: space-between; padding: 15px 17px; }
+.habit-card-body { display: grid; gap: 6px; min-width: 0; }
+.habit-meta { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+.habit-schedule, .habit-duration { color: #8290a2; font-size: 10px; font-weight: 500; }
+.habit-description { color: #8995a5; font-size: 11px; font-weight: 400; line-height: 1.55; margin: 0; }
+.habit-actions { display: flex; flex-shrink: 0; gap: 6px; }
+.habit-actions button { padding: 8px 12px; }
+.habit-priority { border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: .3px; padding: 3px 8px; text-transform: uppercase; }
+.priority-low { background: #eef3f8; color: #5b6b7e; }
+.priority-medium { background: #e8f4ef; color: #1b7a63; }
+.priority-high { background: #f8f0e4; color: #9a6b1f; }
+.priority-urgent { background: #f8eaea; color: #a13d3d; }
 
 @media (max-width: 760px) {
     .sidebar { height: auto; inset: 0 0 auto; padding: 12px 16px; position: sticky; width: 100%; }
@@ -155,6 +171,7 @@ form button { justify-self: start; }
     .page-content { padding: 34px 20px 52px; }
     .stats-grid { grid-template-columns: 1fr; }
     .stats-card { min-height: 145px; }
+    .habit-card { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {

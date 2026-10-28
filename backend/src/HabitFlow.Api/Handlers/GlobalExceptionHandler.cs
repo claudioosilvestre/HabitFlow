@@ -21,6 +21,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             HabitNotFoundException => StatusCodes.Status404NotFound,
             HabitRecordNotFoundException => StatusCodes.Status404NotFound,
             HabitRecordAlreadyExistsException => StatusCodes.Status409Conflict,
+            ArgumentException or ArgumentOutOfRangeException => StatusCodes.Status400BadRequest,
             _ => StatusCodes.Status500InternalServerError
         };
 
