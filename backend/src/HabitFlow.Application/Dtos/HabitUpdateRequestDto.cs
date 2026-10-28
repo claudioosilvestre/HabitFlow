@@ -10,4 +10,5 @@ public class HabitUpdateRequestDto
     public DateOnly StartDate { get; set; }
     public DateOnly? EndDate { get; set; }
     public string? Description {get; set;}
+    public List<DayOfWeek>? DaysOfWeek { get; set; }
 }

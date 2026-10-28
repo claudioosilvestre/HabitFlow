@@ -37,6 +37,9 @@ namespace HabitFlow.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<int>("DaysOfWeekMask")
+                        .HasColumnType("int");
+
                     b.Property<TimeSpan?>("Duration")
                         .HasColumnType("time");
 

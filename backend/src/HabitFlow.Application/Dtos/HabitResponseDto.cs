@@ -12,4 +12,5 @@ public class HabitResponseDto
     public DateOnly? EndDate { get; set; }
     public DateTime CreatedAt {get; set;}
     public string? Description {get; set;}
+    public List<DayOfWeek> DaysOfWeek { get; set; } = [];
 }

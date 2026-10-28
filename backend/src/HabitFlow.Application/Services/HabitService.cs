@@ -26,7 +26,8 @@ public class HabitService : IHabitService
             habitCreateRequestDto.HabitPriority,
             habitCreateRequestDto.StartDate,
             habitCreateRequestDto.EndDate,
-            habitCreateRequestDto.Description
+            habitCreateRequestDto.Description,
+            habitCreateRequestDto.DaysOfWeek
         );
 
         await _habitRepository.Create(habit);
@@ -69,7 +70,8 @@ public class HabitService : IHabitService
             habitUpdateRequestDto.HabitPriority,
             habitUpdateRequestDto.StartDate,
             habitUpdateRequestDto.EndDate,
-            habitUpdateRequestDto.Description
+            habitUpdateRequestDto.Description,
+            habitUpdateRequestDto.DaysOfWeek
         );
 
         await _habitRepository.Update(habit);

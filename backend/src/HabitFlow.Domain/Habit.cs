@@ -1,5 +1,7 @@
 namespace HabitFlow.Domain;
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 public class Habit
 {
     public long Id {get; private set;}
@@ -10,14 +12,24 @@ public class Habit
     public DateOnly? EndDate { get; private set; }
     public DateTime CreatedAt {get; private set;}
     public string? Description {get; private set;}
+    public int DaysOfWeekMask { get; private set; }
+    [NotMapped]
+    public List<DayOfWeek> DaysOfWeek => Enum.GetValues<DayOfWeek>().Where(day => (DaysOfWeekMask & (1 << (int)day)) != 0).ToList();
 
-    public Habit(string name, TimeSpan? duration, HabitPriority habitPriority, DateOnly startDate, DateOnly? endDate, string? description)
+    private Habit()
+    {
+        Name = string.Empty;
+        DaysOfWeekMask = 127;
+    }
+
+    public Habit(string name, TimeSpan? duration, HabitPriority habitPriority, DateOnly startDate, DateOnly? endDate, string? description, IEnumerable<DayOfWeek>? daysOfWeek = null)
     {
         Name = ValidateName(name);
         ValidateDuration(duration);
         ValidateHabitPriority(habitPriority);
         ValidateDates(startDate, endDate);
         Description = ValidateDescription(description);
+        DaysOfWeekMask = ToDaysOfWeekMask(ValidateDaysOfWeek(daysOfWeek ?? Enum.GetValues<DayOfWeek>()));
 
         Duration = duration;
         HabitPriority = habitPriority;
@@ -26,13 +38,14 @@ public class Habit
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateHabit(string name, TimeSpan? duration, HabitPriority priority, DateOnly startDate, DateOnly? endDate, string? description)
+    public void UpdateHabit(string name, TimeSpan? duration, HabitPriority priority, DateOnly startDate, DateOnly? endDate, string? description, IEnumerable<DayOfWeek>? daysOfWeek = null)
     {
         var newName = ValidateName(name);
         ValidateDuration(duration);
         ValidateHabitPriority(priority);
         ValidateDates(startDate, endDate);
         var newDescription = ValidateDescription(description);
+        var newDaysOfWeek = ToDaysOfWeekMask(ValidateDaysOfWeek(daysOfWeek ?? Enum.GetValues<DayOfWeek>()));
 
         Name = newName;
         Duration = duration;
@@ -40,6 +53,7 @@ public class Habit
         StartDate = startDate;
         EndDate = endDate;
         Description = newDescription;
+        DaysOfWeekMask = newDaysOfWeek;
     }
 
     public void ChangeName(string name)
@@ -155,4 +169,16 @@ public class Habit
 
         return normalizedDescription;
     }
+
+    private List<DayOfWeek> ValidateDaysOfWeek(IEnumerable<DayOfWeek> daysOfWeek)
+    {
+        var days = daysOfWeek.Distinct().ToList();
+        if(days.Count == 0 || days.Any(day => !Enum.IsDefined(day)))
+        {
+            throw new ArgumentException("At least one valid day of the week must be selected.", nameof(daysOfWeek));
+        }
+        return days.OrderBy(day => (int)day).ToList();
+    }
+
+    private int ToDaysOfWeekMask(IEnumerable<DayOfWeek> days) => days.Aggregate(0, (mask, day) => mask | (1 << (int)day));
 }

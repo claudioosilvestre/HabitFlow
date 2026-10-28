@@ -30,7 +30,7 @@ function calculateStats(habits: Habit[], records: HabitRecord[], now: Date): Hab
     let completedHabits = 0;
     let opportunities = 0;
     for (let date = periodStart; date <= periodEnd; date = addDays(date, 1)) {
-        for (const habit of habitsActiveOn(habits, date)) {
+        for (const habit of habitsScheduledOn(habits, date)) {
             const isCompleted = recordByHabitAndDate.get(`${habit.id}:${date}`)?.habitState === "Completed";
             if (isCompleted) {
                 completedHabits++;
@@ -43,7 +43,7 @@ function calculateStats(habits: Habit[], records: HabitRecord[], now: Date): Hab
 
     const missedHabits = opportunities;
     const finalizedOpportunities = completedHabits + missedHabits;
-    const todayHabits = habitsActiveOn(habits, today);
+    const todayHabits = habitsScheduledOn(habits, today);
     const todayIsComplete = todayHabits.length > 0 && todayHabits.every(habit => recordByHabitAndDate.get(`${habit.id}:${today}`)?.habitState === "Completed");
     const streakStart = todayIsComplete ? today : addDays(today, -1);
     const currentStreak = calculateCurrentStreak(habits, recordByHabitAndDate, streakStart);
@@ -62,8 +62,11 @@ function calculateStats(habits: Habit[], records: HabitRecord[], now: Date): Hab
 function calculateCurrentStreak(habits: Habit[], records: Map<string, HabitRecord>, startingDate: string): number {
     let streak = 0;
     for (let date = startingDate; ; date = addDays(date, -1)) {
-        const dailyHabits = habitsActiveOn(habits, date);
-        if (dailyHabits.length === 0 || dailyHabits.some(habit => records.get(`${habit.id}:${date}`)?.habitState !== "Completed")) break;
+        const activeHabits = habitsActiveOn(habits, date);
+        if (activeHabits.length === 0) break;
+        const dailyHabits = activeHabits.filter(habit => isScheduledOn(habit, date));
+        if (dailyHabits.length === 0) continue;
+        if (dailyHabits.some(habit => records.get(`${habit.id}:${date}`)?.habitState !== "Completed")) break;
         streak++;
     }
     return streak;
@@ -71,6 +74,16 @@ function calculateCurrentStreak(habits: Habit[], records: Map<string, HabitRecor
 
 function habitsActiveOn(habits: Habit[], date: string): Habit[] {
     return habits.filter(habit => habit.startDate.slice(0, 10) <= date && (!habit.endDate || habit.endDate.slice(0, 10) >= date));
+}
+
+function habitsScheduledOn(habits: Habit[], date: string): Habit[] {
+    return habitsActiveOn(habits, date).filter(habit => isScheduledOn(habit, date));
+}
+
+function isScheduledOn(habit: Habit, date: string): boolean {
+    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date(year, month - 1, day).getDay()];
+    return weekday !== undefined && habit.daysOfWeek.includes(weekday as Habit["daysOfWeek"][number]);
 }
 
 function renderStats(element: HTMLElement, summary: HabitStats): void {
@@ -85,7 +98,7 @@ function renderStats(element: HTMLElement, summary: HabitStats): void {
         ["Completion Rate", `${summary.completionRate}%`, "Percentagem de hábitos concluídos no período"],
         ["Completed Habits", String(summary.completedHabits), "Total de hábitos concluídos no período"],
         ["Missed Habits", String(summary.missedHabits), "Total de hábitos que não foram concluídos"],
-        ["Current Streak", `${summary.currentStreak} ${summary.currentStreak === 1 ? "dia" : "dias"}`, "Dias consecutivos em que todos os hábitos ativos foram concluídos"]
+        ["Current Streak", `${summary.currentStreak} ${summary.currentStreak === 1 ? "dia" : "dias"}`, "Dias previstos consecutivos com todos os hábitos concluídos"]
     ];
 
     for (const [title, value, description] of values) {
@@ -109,12 +122,12 @@ function toDateString(date: Date): string {
 }
 
 function addDays(date: string, amount: number): string {
-    const [year, month, day] = date.split("-").map(Number);
+    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
     const result = new Date(year, month - 1, day + amount);
     return toDateString(result);
 }
 
 function formatDate(date: string): string {
-    const [year, month, day] = date.split("-").map(Number);
+    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
     return new Date(year, month - 1, day).toLocaleDateString("pt-PT", { day: "numeric", month: "short" });
 }

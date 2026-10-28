@@ -31,6 +31,12 @@ nav.addEventListener("click", (event) => {
             return;
         }
 
+        nav.querySelectorAll("a[data-page]").forEach(pageLink => pageLink.classList.toggle("active", pageLink === link));
+        const currentPage = document.querySelector(".topbar-current");
+        if(currentPage) {
+            currentPage.textContent = dataPage === "habits" ? "Os meus hábitos" : dataPage === "stats" ? "Estatísticas" : "Dashboard";
+        }
+
         switch(dataPage) {
             case "dashboard":
                 dashboard(app);
@@ -52,6 +58,10 @@ dashboard(app);
 
 async function showHabitsPage(element:HTMLElement) {
     element.innerHTML = "";
+
+    const heading = document.createElement("h1");
+    heading.textContent = "Os meus hábitos";
+    element.appendChild(heading);
 
     const habitListDiv = document.createElement("div");
     element.appendChild(habitListDiv);

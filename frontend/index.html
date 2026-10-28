@@ -1,24 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HabitFlow</title>
+    <meta name="theme-color" content="#101a2c">
+    <title>HabitFlow | Hábitos com intenção</title>
 </head>
 <body>
-    <nav id="nav">
-        <div class="navbar-title">
-            <a href="#">HabitFlow</a>
+    <div class="app-shell">
+        <nav id="nav" class="sidebar" aria-label="Navegação principal">
+            <a class="brand" href="#" data-page="dashboard" aria-label="HabitFlow, início">
+                <span class="brand-mark" aria-hidden="true">H</span>
+                <span>habit<span class="brand-accent">flow</span><small>PERSONAL WORKSPACE</small></span>
+            </a>
+            <p class="nav-caption">MENU PRINCIPAL</p>
+            <ul class="nav-links">
+                <li><a href="#" data-page="dashboard" class="active"><span class="nav-icon" aria-hidden="true">◫</span>Dashboard</a></li>
+                <li><a href="#" data-page="habits"><span class="nav-icon" aria-hidden="true">✓</span>Os meus hábitos</a></li>
+                <li><a href="#" data-page="stats"><span class="nav-icon" aria-hidden="true">▥</span>Estatísticas</a></li>
+            </ul>
+            <div class="sidebar-bottom">
+                <div class="sidebar-note"><span class="note-icon">✦</span><strong>Um dia de cada vez.</strong><span>Pequenos passos criam grandes mudanças.</span></div>
+                <div class="user-profile"><span class="avatar">HF</span><span><strong>O meu espaço</strong><small>Conta pessoal</small></span><span class="profile-menu">···</span></div>
+            </div>
+        </nav>
+        <div class="workspace">
+            <header class="topbar">
+                <div><span class="topbar-eyebrow">WORKSPACE</span><span class="topbar-divider">/</span><span class="topbar-current">Visão geral</span></div>
+                <div class="topbar-status"><span class="status-dot"></span>O teu progresso, ao teu ritmo</div>
+            </header>
+            <main id="app" class="page-content"></main>
         </div>
-        <ul>
-            <li><a href="#" data-page="dashboard">Dashboard</a></li>
-            <li><a href="#" data-page="habits">My Habits</a></li>
-            <li><a href="#" data-page="stats">Stats</a></li>
-        </ul>
-    </nav>
-    <main id="app">
-
-    </main>
+    </div>
     <script type="module" src="./src/main.ts"></script>
 </body>
 </html>

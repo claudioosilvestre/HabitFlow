@@ -93,5 +93,10 @@ function updateProgress(element: HTMLElement, habits: Habit[], records: Map<numb
 }
 
 function isActiveOnDate(habit: Habit, date: string): boolean {
-    return habit.startDate.slice(0, 10) <= date && (!habit.endDate || habit.endDate.slice(0, 10) >= date);
+    const [year = 0, month = 1, day = 1] = date.split("-").map(Number);
+    const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date(year, month - 1, day).getDay()];
+    return habit.startDate.slice(0, 10) <= date
+        && (!habit.endDate || habit.endDate.slice(0, 10) >= date)
+        && weekday !== undefined
+        && habit.daysOfWeek.includes(weekday as Habit["daysOfWeek"][number]);
 }
