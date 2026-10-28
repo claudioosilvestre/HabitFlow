@@ -1,22 +1,14 @@
+import { dayOptions } from "../lib/labels";
 import type { Habit, WeekDay } from "../types/Habit";
 import type { HabitCreateRequest } from "../types/HabitCreateRequest";
 import { HabitPriority } from "../types/HabitPriority";
-
-const dayOptions: Array<{ value: WeekDay; label: string }> = [
-    { value: "Monday", label: "Seg" }, { value: "Tuesday", label: "Ter" },
-    { value: "Wednesday", label: "Qua" }, { value: "Thursday", label: "Qui" },
-    { value: "Friday", label: "Sex" }, { value: "Saturday", label: "Sáb" },
-    { value: "Sunday", label: "Dom" }
-];
+import { showToast } from "../ui/toast";
 
 export function habitForm(
     element: HTMLElement,
     onSubmit: (habitCreate: HabitCreateRequest) => Promise<void>,
     habit?: Habit
 ): HTMLFormElement {
-    const existing = element.querySelector("form.habit-form");
-    existing?.remove();
-
     const form = document.createElement("form");
     form.className = "habit-form";
 
@@ -97,12 +89,7 @@ export function habitForm(
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
     submitButton.textContent = habit ? "Guardar alterações" : "Criar hábito";
-    const cancelButton = document.createElement("button");
-    cancelButton.type = "button";
-    cancelButton.className = "secondary";
-    cancelButton.textContent = "Cancelar";
-    cancelButton.addEventListener("click", () => form.remove());
-    actions.append(submitButton, cancelButton);
+    actions.append(submitButton);
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -156,9 +143,8 @@ export function habitForm(
         submitButton.disabled = true;
         try {
             await onSubmit(habitCreateRequest);
-            form.remove();
         } catch {
-            alert(habit ? "Não foi possível atualizar o hábito." : "Não foi possível criar o hábito.");
+            showToast(habit ? "Não foi possível atualizar o hábito." : "Não foi possível criar o hábito.");
         } finally {
             submitButton.disabled = false;
         }
@@ -175,7 +161,7 @@ export function habitForm(
         actions
     );
 
-    element.appendChild(form);
+    element.replaceChildren(form);
     nameInput.input.focus();
     return form;
 }

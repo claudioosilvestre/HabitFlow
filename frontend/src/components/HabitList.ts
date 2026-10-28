@@ -1,17 +1,13 @@
+import { iconSvg } from "../lib/icons";
+import { dayLabels, priorityLabels } from "../lib/labels";
 import type { Habit } from "../types/Habit";
-import { HabitPriority } from "../types/HabitPriority";
+import { formatDateRange, formatDuration, habitStatus } from "../utils/habits";
 
-const dayLabels: Record<string, string> = {
-    Monday: "Seg", Tuesday: "Ter", Wednesday: "Qua", Thursday: "Qui",
-    Friday: "Sex", Saturday: "Sáb", Sunday: "Dom"
-};
-
-const priorityLabels: Record<HabitPriority, string> = {
-    [HabitPriority.Low]: "Baixa",
-    [HabitPriority.Medium]: "Média",
-    [HabitPriority.High]: "Alta",
-    [HabitPriority.Urgent]: "Urgente"
-};
+const statusLabels = {
+    active: "Ativo",
+    upcoming: "A começar",
+    ended: "Terminado"
+} as const;
 
 export function listHabits(
     element: HTMLElement,
@@ -21,26 +17,25 @@ export function listHabits(
 ): void {
     element.innerHTML = "";
 
-    if (habits.length === 0) {
-        const empty = document.createElement("p");
-        empty.className = "empty-state";
-        empty.textContent = "Ainda não criaste nenhum hábito. Começa por adicionar o primeiro.";
-        element.appendChild(empty);
-        return;
-    }
-
     const list = document.createElement("ul");
     list.className = "habit-list";
 
     habits.forEach(habit => {
         const line = document.createElement("li");
-        line.className = "habit-card";
+        const status = habitStatus(habit);
+        line.className = `habit-card status-${status}`;
 
         const body = document.createElement("div");
         body.className = "habit-card-body";
 
+        const titleRow = document.createElement("div");
+        titleRow.className = "habit-title-row";
         const name = document.createElement("strong");
         name.textContent = habit.name;
+        const statusBadge = document.createElement("span");
+        statusBadge.className = `habit-status status-${status}`;
+        statusBadge.textContent = statusLabels[status];
+        titleRow.append(name, statusBadge);
 
         const meta = document.createElement("div");
         meta.className = "habit-meta";
@@ -53,7 +48,11 @@ export function listHabits(
         schedule.className = "habit-schedule";
         schedule.textContent = habit.daysOfWeek.map(day => dayLabels[day]).join(" · ");
 
-        meta.append(priority, schedule);
+        const dates = document.createElement("span");
+        dates.className = "habit-duration";
+        dates.textContent = formatDateRange(habit);
+
+        meta.append(priority, schedule, dates);
 
         const duration = formatDuration(habit.duration);
         if (duration) {
@@ -63,7 +62,7 @@ export function listHabits(
             meta.appendChild(durationLabel);
         }
 
-        body.append(name, meta);
+        body.append(titleRow, meta);
 
         if (habit.description) {
             const description = document.createElement("p");
@@ -75,18 +74,8 @@ export function listHabits(
         const actions = document.createElement("div");
         actions.className = "habit-actions";
 
-        const editButton = document.createElement("button");
-        editButton.type = "button";
-        editButton.className = "secondary";
-        editButton.textContent = "Editar";
-        editButton.addEventListener("click", () => onEdit(habit));
-
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.className = "danger";
-        deleteButton.textContent = "Apagar";
-        deleteButton.addEventListener("click", () => onDelete(habit));
-
+        const editButton = iconAction("Editar hábito", "edit", () => onEdit(habit));
+        const deleteButton = iconAction("Apagar hábito", "trash", () => onDelete(habit), "danger");
         actions.append(editButton, deleteButton);
         line.append(body, actions);
         list.appendChild(line);
@@ -95,11 +84,13 @@ export function listHabits(
     element.appendChild(list);
 }
 
-function formatDuration(duration: string | null): string | null {
-    if (!duration) return null;
-    const [hours, minutes] = duration.split(":").map(Number);
-    if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
-    if (hours === 0) return `${minutes} min`;
-    if (minutes === 0) return `${hours} h`;
-    return `${hours} h ${minutes} min`;
+function iconAction(label: string, icon: "edit" | "trash", onClick: () => void, variant = "secondary"): HTMLButtonElement {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `icon-button ${variant}`;
+    button.setAttribute("aria-label", label);
+    button.title = label;
+    button.innerHTML = iconSvg(icon);
+    button.addEventListener("click", onClick);
+    return button;
 }
